@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Patient History{% endblock %}
+{% block content %}
+<h2 class="mb-4">Patient History</h2>
+<div class="card mb-4">
+    <div class="card-body">
+        <h5>Patient: {{ patient.name }}</h5>
+        <p><strong>Age:</strong> {{ patient.age }} | <strong>Gender:</strong> {{ patient.gender }}</p>
+        <p><strong>Contact:</strong> {{ patient.contact }}</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Visit History</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Visit Date</th>
+                        <th>Visit Time</th>
+                        <th>Diagnosis</th>
+                        <th>Prescription</th>
+                        <th>Additional notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                    {% if appointment.treatment %}
+                    <tr>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                        <td>{{ appointment.treatment.diagnosis }}</td>
+                        <td>{{ appointment.treatment.prescription }}</td>
+                        <td>{{ appointment.treatment.notes or 'N/A' }}</td>
+                    </tr>
+                    {% endif %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No visit history available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{{ url_for('doctor_dashboard') }}" class="btn btn-secondary">Back</a>
+</div>
+{% endblock %}

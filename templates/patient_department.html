@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ department.name }}{% endblock %}
+{% block content %}
+<h3 class="mb-3">Department of {{ department.name }}</h3>
+<p class="text-muted">{{ department.description }}</p>
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">All doctors</h5>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Doctor</th>
+            <th>Specialization</th>
+            <th>Experience</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in doctors %}
+            <tr>
+              <td>{{ d.name }}</td>
+              <td>{{ d.specialization }}</td>
+              <td>{{ d.experience }} years</td>
+              <td><a href="{{ url_for('book_appointment', doctor_id=d.id) }}" class="btn btn-sm btn-primary">Check availability</a></td>
+              <td><a href="{{ url_for('doctor_profile', doctor_id=d.id) }}" class="btn btn-sm btn-outline-secondary">View details</a></td>
+            </tr>
+          {% else %}
+            <tr><td colspan="5" class="text-center text-muted">No doctors available in this department</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <a href="{{ url_for('patient_dashboard') }}" class="btn btn-secondary mt-2">Back</a>
+  </div>
+</div>
+{% endblock %}

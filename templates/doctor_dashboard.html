@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Doctor Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Welcome, Dr. {{ doctor.name }}</h2>
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Department</h5>
+                <h4>{{ doctor.department.name }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h5 class="card-title">Upcoming Appointments</h5>
+                <h2>{{ upcoming_appointments|length }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Patients</h5>
+                <h2>{{ patients|length }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Upcoming Appointments</h5>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Patient</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in upcoming_appointments %}
+                            <tr>
+                                <td>{{ appointment.date }}</td>
+                                <td>{{ appointment.time }}</td>
+                                <td>{{ appointment.patient.name }}</td>
+                                <td>
+                                    <a href="{{ url_for('complete_appointment', appointment_id=appointment.id) }}" class="btn btn-sm btn-success">Complete</a>
+                                    <a href="{{ url_for('doctor_cancel_appointment', appointment_id=appointment.id) }}" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Cancel this appointment?')">Cancel</a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">No upcoming appointments</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">My Patients</h5>
+                <div class="list-group">
+                    {% for patient in patients %}
+                    <a href="{{ url_for('patient_history', patient_id=patient.id) }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ patient.name }}</h6>
+                        </div>
+                        <small>{{ patient.age }} years, {{ patient.gender }}</small>
+                    </a>
+                    {% else %}
+                    <p class="text-muted">No patients yet</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

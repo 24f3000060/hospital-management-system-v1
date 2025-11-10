@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}All Appointments{% endblock %}
+{% block content %}
+<h2 class="mb-3 section-title">All Appointments</h2>
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in appointments %}
+          <tr class="{% if highlight and highlight.id == a.id %}table-active{% endif %}">
+            <td>{{ a.id }}</td>
+            <td>{{ a.date }}</td>
+            <td>{{ a.time }}</td>
+            <td>{{ a.patient.name }}</td>
+            <td>{{ a.doctor.name }}</td>
+            <td>{{ a.doctor.department.name }}</td>
+            <td>
+              {% if a.status == 'Booked' %}
+              <span class="badge badge-soft-primary">{{ a.status }}</span>
+              {% elif a.status == 'Completed' %}
+              <span class="badge badge-soft-success">{{ a.status }}</span>
+              {% else %}
+              <span class="badge badge-soft-danger">{{ a.status }}</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if a.status == 'Completed' and a.treatment %}
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin_appointments', show=a.id) }}">View</a>
+              {% else %}
+              <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% if highlight and highlight.treatment %}
+<div class="card mt-3">
+  <div class="card-body">
+    <h5 class="card-title">Appointment #{{ highlight.id }} — {{ highlight.patient.name }}</h5>
+    <p class="mb-1"><strong>Date & Time:</strong> {{ highlight.date }} {{ highlight.time }}</p>
+    <p class="mb-1"><strong>Doctor:</strong> Dr. {{ highlight.doctor.name }} ({{ highlight.doctor.department.name }})</p>
+    <hr>
+    <p class="mb-1"><strong>Diagnosis:</strong></p>
+    <p>{{ highlight.treatment.diagnosis }}</p>
+    <p class="mb-1"><strong>Prescription:</strong></p>
+    <p>{{ highlight.treatment.prescription }}</p>
+    {% if highlight.treatment.notes %}
+      <p class="mb-1"><strong>Additional Notes:</strong></p>
+      <p>{{ highlight.treatment.notes }}</p>
+    {% endif %}
+    <a href="{{ url_for('admin_appointments') }}" class="btn btn-secondary mt-2">Close</a>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

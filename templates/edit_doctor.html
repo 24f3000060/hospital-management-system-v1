@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Edit Doctor{% endblock %}
+{% block content %}
+<h2 class="mb-4">Edit Doctor</h2>
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ doctor.name }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="department_id" class="form-label">Department</label>
+                    <select class="form-select" id="department_id" name="department_id" required>
+                        {% for dept in departments %}
+                        <option value="{{ dept.id }}" {% if dept.id == doctor.department_id %}selected{% endif %}>{{ dept.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="specialization" class="form-label">Specialization</label>
+                    <input type="text" class="form-control" id="specialization" name="specialization" value="{{ doctor.specialization }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="experience" class="form-label">Years of Experience</label>
+                    <input type="number" class="form-control" id="experience" name="experience" value="{{ doctor.experience }}" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="contact" class="form-label">Contact Number</label>
+                <input type="text" class="form-control" id="contact" name="contact" value="{{ doctor.contact }}" required>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">Update Doctor</button>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

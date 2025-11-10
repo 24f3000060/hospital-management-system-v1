@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Reschedule Appointment{% endblock %}
+{% block content %}
+<h2 class="mb-3 section-title">Reschedule Appointment</h2>
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Current Appointment</h5>
+    <p><strong>Doctor:</strong> Dr. {{ doctor.name }} ({{ doctor.department.name }})</p>
+    <p><strong>Appointment Date & Time:</strong> {{ appointment.date }} at {{ appointment.time }}</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Select New Time</h5>
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th style="width:18%">Date</th>
+            <th>Available Slots</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for day in week %}
+          <tr>
+            <td><span class="badge bg-secondary fs-6">{{ day.date.strftime('%d/%m/%Y') }}</span></td>
+            <td>
+              {% if day.slots %}
+                <div class="d-flex flex-wrap gap-2">
+                  {% for s in day.slots %}
+                  <form method="POST" class="d-inline">
+                    <input type="hidden" name="date" value="{{ day.date.strftime('%Y-%m-%d') }}">
+                    <input type="hidden" name="time" value="{{ s }}">
+                    <button type="submit" class="btn btn-sm btn-outline-success slot-btn">{{ s }}</button>
+                  </form>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <span class="badge bg-danger-subtle text-danger border border-danger">No slots available</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <a href="{{ url_for('patient_dashboard') }}" class="btn btn-secondary mt-2">Cancel</a>
+  </div>
+</div>
+{% endblock %}
